@@ -6,14 +6,15 @@ function App() {
     { name: 'Juan', prediction: 8 },
     { name: 'Matt', prediction: 10 },
     { name: 'Reuben', prediction: 6 },
-    { name: 'Nancy', prediction: 50 },
+    { name: 'Nance', prediction: 50 },
     { name: 'Izzy', prediction: 14 },
     { name: 'Toby', prediction: 12 },
     { name: 'Ferdy', prediction: 4 },
     { name: 'Feli', prediction: 9 },
     { name: 'Anushka', prediction: 11 },
     { name: 'Gregor', prediction: 3 },
-    { name: 'Daimy', prediction: 6 }
+    { name: 'Daimy', prediction: 6 },
+    { name: 'Awen', prediction: 6 }
   ].sort((a, b) => a.prediction - b.prediction)
 
   const getClosestBet = () => {
