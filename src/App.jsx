@@ -30,30 +30,6 @@ function App() {
     }
   }
 
-  const updateCount = async (newCount) => {
-    try {
-      setLoading(true)
-      await axios.put(`https://api.jsonbin.io/v3/b/${BIN_ID}`, 
-        { 
-          count: newCount,
-          predictions: bets
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-      setCurrentCount(newCount)
-      setError(null)
-    } catch (err) {
-      setError('Failed to update count')
-      console.error('Error updating count:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   const getClosestBets = () => {
     if (!bets.length) return [];
     
@@ -89,9 +65,7 @@ function App() {
       <div className="counter-section">
         <h1>🚽 Bathroom Visit Counter 🧻</h1>
         <div className="counter">
-          <button onClick={() => updateCount(currentCount - 1)} className="count-button">➖</button>
           <span className="count">{currentCount}</span>
-          <button onClick={() => updateCount(currentCount + 1)} className="count-button">➕</button>
         </div>
         <div className="emoji-row">💩 💨 🚽</div>
       </div>
