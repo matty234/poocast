@@ -1,7 +1,14 @@
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import './App.css'
 
 function App() {
-  const currentCount = 0
+  const [currentCount, setCurrentCount] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  const BIN_ID = '677bfac7e41b4d34e470cfd8' // You'll get this after creating a bin
+
   const bets = [
     { name: 'Juan', prediction: 8 },
     { name: 'Matt', prediction: 10 },
@@ -16,6 +23,45 @@ function App() {
     { name: 'Daimy', prediction: 6 },
     { name: 'Awen', prediction: 6 }
   ].sort((a, b) => a.prediction - b.prediction)
+
+  useEffect(() => {
+    fetchCount()
+  }, [])
+
+  const fetchCount = async () => {
+    try {
+      setLoading(true)
+      const response = await axios.get(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`)
+      setCurrentCount(response.data.record.count)
+      setError(null)
+    } catch (err) {
+      setError('Failed to load count')
+      console.error('Error fetching count:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const updateCount = async (newCount) => {
+    try {
+      setLoading(true)
+      await axios.put(`https://api.jsonbin.io/v3/b/${BIN_ID}`, 
+        { count: newCount },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      setCurrentCount(newCount)
+      setError(null)
+    } catch (err) {
+      setError('Failed to update count')
+      console.error('Error updating count:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const getClosestBets = () => {
     let minDiff = Infinity;
@@ -37,12 +83,22 @@ function App() {
   const closestBets = getClosestBets()
   const leaderNames = closestBets.map(bet => bet.name).join(', ')
 
+  if (loading) {
+    return <div className="loading">Loading... 🚽</div>
+  }
+
+  if (error) {
+    return <div className="error">{error}</div>
+  }
+
   return (
     <div className="container">
       <div className="counter-section">
         <h1>🚽 Bathroom Visit Counter 🧻</h1>
         <div className="counter">
+          <button onClick={() => updateCount(currentCount - 1)} className="count-button">➖</button>
           <span className="count">{currentCount}</span>
+          <button onClick={() => updateCount(currentCount + 1)} className="count-button">➕</button>
         </div>
         <div className="emoji-row">💩 💨 🚽</div>
       </div>

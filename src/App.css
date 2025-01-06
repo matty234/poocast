@@ -159,3 +159,33 @@ h2 {
   font-size: 2rem;
   font-family: 'Arial Rounded MT Bold', sans-serif;
 }
+
+.loading, .error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 2rem;
+  color: #1e4258;
+  background: #f0f8ff;
+}
+
+.error {
+  color: #dc3545;
+}
+
+.count-button {
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  background: #2c7b9e;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.count-button:hover {
+  background: #1e4258;
+  transform: translateY(-2px);
+}
