@@ -62,6 +62,11 @@ function App() {
 
   return (
     <div className="container">
+      <div className="info-banner">
+        <p>🚽 1 flush = 1 count</p>
+        <p>Counting from 5pm today to 8am tomorrow</p>
+      </div>
+
       <div className="counter-section">
         <h1>🚽 Bathroom Visit Counter 🧻</h1>
         <div className="counter">

@@ -189,3 +189,19 @@ h2 {
   background: #1e4258;
   transform: translateY(-2px);
 }
+
+.info-banner {
+  background: #2c7b9e;
+  color: white;
+  padding: 1rem;
+  border-radius: 15px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.info-banner p {
+  margin: 0;
+}
