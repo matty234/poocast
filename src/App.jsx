@@ -4,39 +4,27 @@ import './App.css'
 
 function App() {
   const [currentCount, setCurrentCount] = useState(0)
+  const [bets, setBets] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const BIN_ID = '677bfac7e41b4d34e470cfd8' // You'll get this after creating a bin
-
-  const bets = [
-    { name: 'Juan', prediction: 8 },
-    { name: 'Matt', prediction: 10 },
-    { name: 'Reuben', prediction: 6 },
-    { name: 'Nance', prediction: 50 },
-    { name: 'Izzy', prediction: 14 },
-    { name: 'Toby', prediction: 12 },
-    { name: 'Ferdy', prediction: 4 },
-    { name: 'Feli', prediction: 9 },
-    { name: 'Anushka', prediction: 11 },
-    { name: 'Gregor', prediction: 5 },
-    { name: 'Daimy', prediction: 6 },
-    { name: 'Awen', prediction: 6 }
-  ].sort((a, b) => a.prediction - b.prediction)
+  const BIN_ID = '677bfac7e41b4d34e470cfd8'
 
   useEffect(() => {
-    fetchCount()
+    fetchData()
   }, [])
 
-  const fetchCount = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true)
       const response = await axios.get(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`)
-      setCurrentCount(response.data.record.count)
+      const { count, predictions } = response.data.record
+      setCurrentCount(count)
+      setBets(predictions.sort((a, b) => a.prediction - b.prediction))
       setError(null)
     } catch (err) {
-      setError('Failed to load count')
-      console.error('Error fetching count:', err)
+      setError('Failed to load data')
+      console.error('Error fetching data:', err)
     } finally {
       setLoading(false)
     }
@@ -46,7 +34,10 @@ function App() {
     try {
       setLoading(true)
       await axios.put(`https://api.jsonbin.io/v3/b/${BIN_ID}`, 
-        { count: newCount },
+        { 
+          count: newCount,
+          predictions: bets
+        },
         {
           headers: {
             'Content-Type': 'application/json'
@@ -64,6 +55,8 @@ function App() {
   }
 
   const getClosestBets = () => {
+    if (!bets.length) return [];
+    
     let minDiff = Infinity;
     let closestBets = [];
     
@@ -103,13 +96,15 @@ function App() {
         <div className="emoji-row">💩 💨 🚽</div>
       </div>
 
-      <div className="leader-banner">
-        <div className="leader-content">
-          <span className="leader-label">Current {closestBets.length > 1 ? 'Leaders' : 'Leader'}:</span>
-          <span className="leader-name">👑 {leaderNames}</span>
-          <span className="leader-prediction">Guess: {closestBets[0].prediction}</span>
+      {closestBets.length > 0 && (
+        <div className="leader-banner">
+          <div className="leader-content">
+            <span className="leader-label">Current {closestBets.length > 1 ? 'Leaders' : 'Leader'}:</span>
+            <span className="leader-name">👑 {leaderNames}</span>
+            <span className="leader-prediction">Guess: {closestBets[0].prediction}</span>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="bets-section">
         <h2>🎲 Current Bets 🎲</h2>
